@@ -10,6 +10,7 @@ using System.Text;
 
 public class FileManager : MonoBehaviour
 {
+    public Renderer[] ModelRenderers;
     private string host = "ftp://183.100.89.162/";
     private string user = "svr_master";
     private string pass = "wnsvlrtmghd";
@@ -37,7 +38,7 @@ public class FileManager : MonoBehaviour
         {
             Debug.Log(path);
             WWW www = new WWW("file://" + path);
-            image.texture = www.texture;
+            //image.texture = www.texture;
         }
     }
 
@@ -54,5 +55,22 @@ public class FileManager : MonoBehaviour
         wc.UploadFile(host + pathName, path);
 
         Debug.Log("UPload");
+    Texture2D SkinTexture = LoadTextureFromFile(path);
+    SkinTexture.filterMode = FilterMode.Point;
+    // 모든 모델에 대해 텍스처 교체
+    foreach (Renderer modelRenderer in ModelRenderers)
+    {
+        modelRenderer.material.mainTexture = SkinTexture;
+    }
+}
+
+    private Texture2D LoadTextureFromFile(string path)
+    {
+
+        byte[] fileData = File.ReadAllBytes(path);
+        Texture2D texture = new Texture2D(2, 2);
+        texture.LoadImage(fileData);
+
+        return texture;
     }
 }
