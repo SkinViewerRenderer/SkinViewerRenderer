@@ -30,6 +30,13 @@ public class FileManager : MonoBehaviour
         if (image != null)
         {
             UpdateImage();
+             Texture2D SkinTexture = LoadTextureFromFile(path);
+    SkinTexture.filterMode = FilterMode.Point;
+    // 모든 모델에 대해 텍스처 교체
+    foreach (Renderer modelRenderer in ModelRenderers)
+    {
+        modelRenderer.material.mainTexture = SkinTexture;
+    }
         }
 
         //image pixel check 64x64
@@ -55,13 +62,7 @@ public class FileManager : MonoBehaviour
         wc.UploadFile(host + pathName, path);
 
         Debug.Log("UPload");
-    Texture2D SkinTexture = LoadTextureFromFile(path);
-    SkinTexture.filterMode = FilterMode.Point;
-    // 모든 모델에 대해 텍스처 교체
-    foreach (Renderer modelRenderer in ModelRenderers)
-    {
-        modelRenderer.material.mainTexture = SkinTexture;
-    }
+   
 }
 
     private Texture2D LoadTextureFromFile(string path)
